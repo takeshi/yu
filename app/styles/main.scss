@@ -1,0 +1,35 @@
+@import "compass_twitter_bootstrap";
+
+div.bar{
+	display:inline-block;
+	width:20px;
+	height:75px;
+	background-color:teal;
+	margin-left :1px;
+}
+
+table.datamodel{
+  width:auto;
+  display:inline-table;
+  margin-left:10px;
+}
+
+.w100{
+  width:100%;
+}
+
+.node {
+  stroke-width: 1.5px;
+}
+
+.link {
+  stroke: #999;
+  stroke-opacity: .6;
+}
+
+svg#models {
+//  height: 100%;
+ // width: 100%;
+  border:1px dotted whitesmoke;
+  background-color: whitesmoke;
+}
