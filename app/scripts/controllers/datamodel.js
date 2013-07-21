@@ -12,20 +12,20 @@
 
 	var factory = function(element) {
 		switch (element[0]) {
-		case 'markdown':
-			return new Markdown(element);
-		case 'blockquote':
-			return new Blockquote(element);
-		case 'header':
-			return new Header(element);
-		case 'bulletlist':
-			return new Bulletlist(element);
-		case 'listitem':
-			return new Listitem(element);
-		case 'para':
-			return new Para(element);
-		case 'em':
-			return new Em(element);
+			case 'markdown':
+				return new Markdown(element);
+			case 'blockquote':
+				return new Blockquote(element);
+			case 'header':
+				return new Header(element);
+			case 'bulletlist':
+				return new Bulletlist(element);
+			case 'listitem':
+				return new Listitem(element);
+			case 'para':
+				return new Para(element);
+			case 'em':
+				return new Em(element);
 		}
 		return new Empty(element);
 	};
@@ -35,7 +35,7 @@
 		this.fk = item.link();
 		this.values = item.text();
 		this.item = item;
-		if (this.fk){
+		if (this.fk) {
 			this.toFKHtml = 'FK(' + this.fk.ref + ')';
 		}
 	};
@@ -56,21 +56,21 @@
 			//			console.log(element);
 			var tag = element.type;
 			switch (tag) {
-			case 'markdown':
-				this.markdown(element);
-				break;
-			case 'blockquote':
-				this.blockquote(element);
-				break;
-			case 'header':
-				this.header(element);
-				break;
-			case 'bulletlist':
-				this.bulletlist(element);
-				break;
-			case 'listitem':
-				this.listitem(element);
-				break;
+				case 'markdown':
+					this.markdown(element);
+					break;
+				case 'blockquote':
+					this.blockquote(element);
+					break;
+				case 'header':
+					this.header(element);
+					break;
+				case 'bulletlist':
+					this.bulletlist(element);
+					break;
+				case 'listitem':
+					this.listitem(element);
+					break;
 			}
 		};
 		p.createTable = function() {
@@ -115,7 +115,7 @@
 
 	var Element = (function() {
 		var Element = function(values) {
-			if (values === null) {
+			if (!values) {
 				return;
 			}
 			this.element = values;
@@ -132,136 +132,137 @@
 
 	/*jshint unused:false*/
 	var Empty = (function() {
-			var Empty = function(value) {
-				this.value = value;
-			};
-			var p = Empty.prototype = new Element();
-			p.accept = function(visitor) {
-				console.error(visitor, this);
-			};
-			return Empty;
-		})();
+		var Empty = function(value) {
+			this.value = value;
+		};
+		var p = Empty.prototype = new Element();
+		p.accept = function(visitor) {
+			console.error(visitor, this);
+		};
+		return Empty;
+	})();
 
 	var Markdown = (function() {
-			var Markdown = function(value) {
-				Element.apply(this, [value]);
-			};
-			var p = Markdown.prototype = new Element();
-			return Markdown;
-		})();
+		var Markdown = function(value) {
+			Element.apply(this, [value]);
+		};
+		var p = Markdown.prototype = new Element();
+		return Markdown;
+	})();
 
 	var Para = (function() {
-			var Para = function(value) {
-				Element.apply(this, [value]);
-			};
-			var p = Para.prototype = new Element();
-			return Para;
-		})();
+		var Para = function(value) {
+			Element.apply(this, [value]);
+		};
+		var p = Para.prototype = new Element();
+		return Para;
+	})();
 
 	var Header = (function() {
-			var Header = function(value) {
-				Element.apply(this, [value]);
-			};
-			var p = Header.prototype = new Element();
-			return Header;
-		})();
+		var Header = function(value) {
+			Element.apply(this, [value]);
+		};
+		var p = Header.prototype = new Element();
+		return Header;
+	})();
 
 	var Blockquote = (function() {
-			var Blockquote = function(value) {
-				Element.apply(this, [value]);
-				this.comment = elements(this.values);
-			};
-			var p = Blockquote.prototype = new Element();
-			return Blockquote;
-		})();
+		var Blockquote = function(value) {
+			Element.apply(this, [value]);
+			this.comment = elements(this.values);
+		};
+		var p = Blockquote.prototype = new Element();
+		return Blockquote;
+	})();
 
 
 	var Em = (function() {
-			var Em = function(value) {
-				Element.apply(this, [value]);
-			};
-			var p = Em.prototype = new Element();
-			return Em;
-		})();
+		var Em = function(value) {
+			Element.apply(this, [value]);
+		};
+		var p = Em.prototype = new Element();
+		return Em;
+	})();
 
 	var Bulletlist = (function() {
-			var Bulletlist = function(value) {
-				Element.apply(this, [value]);
-				this.items = elements(this.values);
-			};
-			var p = Bulletlist.prototype = new Element();
-			return Bulletlist;
-		})();
+		var Bulletlist = function(value) {
+			Element.apply(this, [value]);
+			this.items = elements(this.values);
+		};
+		var p = Bulletlist.prototype = new Element();
+		return Bulletlist;
+	})();
 	/*jshint unused:true*/
 
 
 	var Listitem = (function() {
-			var Listitem = function(value) {
-				Element.apply(this, [value]);
-			};
-			var p = Listitem.prototype = new Element();
-			p.link = function() {
-				if (angular.isArray(this.values[0])) {
-					if (this.values[0][0] === 'link') {
-						return this.values[0][1];
+		var Listitem = function(value) {
+			Element.apply(this, [value]);
+		};
+		var p = Listitem.prototype = new Element();
+		p.link = function() {
+			if (angular.isArray(this.values[0])) {
+				if (this.values[0][0] === 'link') {
+					return this.values[0][1];
+				}
+				if (this.values[0][0] === 'link_ref') {
+					return this.values[0][1];
+				}
+				if (this.values[0][0] === 'em') {
+					var em = this.values[0][1];
+					if (angular.isArray(em)) {
+						return em[1];
 					}
-					if (this.values[0][0] === 'link_ref') {
-						return this.values[0][1];
-					}
+					return null;
+				}
+			}
+		};
+		p.hasEm = function() {
+			if (angular.isArray(this.values[0])) {
+				if (this.values[0].length === 2) {
 					if (this.values[0][0] === 'em') {
-						var em = this.values[0][1];
-						if (angular.isArray(em)) {
-							return em[1];
-						}
-						return null;
+						return true;
 					}
 				}
-			};
-			p.hasEm = function() {
-				if (angular.isArray(this.values[0])) {
-					if (this.values[0].length === 2) {
-						if (this.values[0][0] === 'em') {
-							return true;
-						}
-					}
-					if (this.values[0].length === 3) {
-						if (this.values[0][0] === 'link') {
-							if (this.values[0][2].length === 2) {
-								if (this.values[0][2][0] === 'em') {
-									return true;
-								}
+				if (this.values[0].length === 3) {
+					if (this.values[0][0] === 'link') {
+						if (this.values[0][2].length === 2) {
+							if (this.values[0][2][0] === 'em') {
+								return true;
 							}
 						}
 					}
 				}
-				return false;
-			};
-			p.text = function() {
-				if (angular.isArray(this.values[0])) {
-					if (this.values[0][0] === 'link') {
-						return this.values[0][2];
-					}
-					if (this.values[0][0] === 'link_ref') {
-						return this.values[0][1].ref;
-					}
-					if (this.values[0][0] === 'em') {
-						var em = this.values[0][1];
-						if (angular.isArray(em)) {
-							return em[1].ref;
-						}
-						return em;
-					}
-				} else {
-					return this.values[0];
+			}
+			return false;
+		};
+		p.text = function() {
+			if (angular.isArray(this.values[0])) {
+				if (this.values[0][0] === 'link') {
+					return this.values[0][2];
 				}
-			};
-			return Listitem;
-		})();
+				if (this.values[0][0] === 'link_ref') {
+					return this.values[0][1].ref;
+				}
+				if (this.values[0][0] === 'em') {
+					var em = this.values[0][1];
+					if (angular.isArray(em)) {
+						return em[1].ref;
+					}
+					return em;
+				}
+			} else {
+				return this.values[0];
+			}
+		};
+		return Listitem;
+	})();
 
 	angular.module('d3App')
 		.controller('DatamodelCtrl', function($scope, $http) {
 		$scope.datamodel = '';
-		if (localStorage.datamodel) {
+		var local = localStorage.datamodel;
+		if (local.trim().length !== 0) {
 			$scope.datamodel = localStorage.datamodel;
 		} else {
 			$http.get('/data/datamodel.md')
@@ -293,7 +294,7 @@
 				angular.forEach(table.colomns, function(colomn) {
 					var colomnName = colomn.values.toString().trim().toUpperCase();
 					var targetId = null;
-					if (colomnHash[colomnName] !== null) {
+					if (colomnHash[colomnName] !== undefined) {
 						targetId = colomnHash[colomnName];
 					} else {
 						colomns.push({
